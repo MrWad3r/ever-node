@@ -109,33 +109,33 @@ async fn get_key_blocks(
         if engine.check_stop() {
             fail!("Boot was stopped");
         }
-        log::info!(target: "boot", "download_next_key_blocks_ids {}", handle.id());
-        let (ids, _incomplete) = match engine.download_next_key_blocks_ids(handle.id(), 10).await {
-            Err(err) => {
-                log::warn!(target: "boot", "download_next_key_blocks_ids {}: {}", handle.id(), err);
-                futures_timer::Delay::new(Duration::from_secs(1)).await;
-                continue
-            }
-            Ok(result) => result
-        };
-        if let Some(block_id) = ids.last() {
-            log::info!(target: "boot", "last key block is {}", block_id);
-            download_new_key_blocks_until = engine.now() + engine.time_for_blockchain_init();
-            for block_id in &ids {
-                //let prev_time = handle.gen_utime()?;
-                let (next_handle, proof) = download_key_block_proof(
-                    engine, block_id, zero_state, prev_block_proof.as_ref()
-                ).await?;
-                handle = next_handle;
-                CHECK!(handle.is_key_block()?);
-                CHECK!(handle.gen_utime()? != 0);
-                // if engine.is_persistent_state(handle.gen_utime()?, prev_time) {
-                //     engine.set_init_mc_block_id(block_id);
-                // }
-                key_blocks.push(handle.clone());
-                prev_block_proof = Some(proof);
-            }
-        }
+        // log::info!(target: "boot", "download_next_key_blocks_ids {}", handle.id());
+        // let (ids, _incomplete) = match engine.download_next_key_blocks_ids(handle.id(), 10).await {
+        //     Err(err) => {
+        //         log::warn!(target: "boot", "download_next_key_blocks_ids {}: {}", handle.id(), err);
+        //         futures_timer::Delay::new(Duration::from_secs(1)).await;
+        //         continue
+        //     }
+        //     Ok(result) => result
+        // };
+        // if let Some(block_id) = ids.last() {
+        //     log::info!(target: "boot", "last key block is {}", block_id);
+        //     download_new_key_blocks_until = engine.now() + engine.time_for_blockchain_init();
+        //     for block_id in &ids {
+        //         //let prev_time = handle.gen_utime()?;
+        //         let (next_handle, proof) = download_key_block_proof(
+        //             engine, block_id, zero_state, prev_block_proof.as_ref()
+        //         ).await?;
+        //         handle = next_handle;
+        //         CHECK!(handle.is_key_block()?);
+        //         CHECK!(handle.gen_utime()? != 0);
+        //         // if engine.is_persistent_state(handle.gen_utime()?, prev_time) {
+        //         //     engine.set_init_mc_block_id(block_id);
+        //         // }
+        //         key_blocks.push(handle.clone());
+        //         prev_block_proof = Some(proof);
+        //     }
+        // }
         if let Some(handle) = key_blocks.last() {
             let utime = handle.gen_utime()?;
             log::info!(target: "boot", "id: {}, utime: {}, now: {}", handle.id(), utime, engine.now());

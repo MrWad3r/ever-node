@@ -666,17 +666,17 @@ impl NodeNetwork {
             }
         )?;
 
-        Neighbours::start_ping(Arc::clone(&peers));
-        Neighbours::start_reload(Arc::clone(&peers));
-        Neighbours::start_rnd_peers_process(Arc::clone(&peers));
-        NodeNetwork::start_update_peers(self.clone(), &client_overlay);
-        NodeNetwork::process_overlay_peers(
-            peers.clone(), 
-            self.network_context.dht.clone(), 
-            self.network_context.overlay.clone(), 
-            overlay_id_short.clone(),
-            &self.stop
-        );
+        // Neighbours::start_ping(Arc::clone(&peers));
+        // Neighbours::start_reload(Arc::clone(&peers));
+        // Neighbours::start_rnd_peers_process(Arc::clone(&peers));
+        // NodeNetwork::start_update_peers(self.clone(), &client_overlay);
+        // NodeNetwork::process_overlay_peers(
+        //     peers.clone(),
+        //     self.network_context.dht.clone(),
+        //     self.network_context.overlay.clone(),
+        //     overlay_id_short.clone(),
+        //     &self.stop
+        // );
         log::info!("Started Overlay {}", &overlay_id_short);
         Ok(client_overlay as Arc<dyn FullNodeOverlayClient>)
 
